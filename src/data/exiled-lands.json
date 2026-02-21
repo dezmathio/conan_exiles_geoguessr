@@ -1,0 +1,42 @@
+{
+  "mapId": "exiled-lands",
+  "name": "Exiled Lands",
+  "mapImage": "assets/exiled-lands/map/exiled-lands-basemap.jpg",
+  "locations": [
+    {
+      "id": "el-001",
+      "label": "Bridge in the frozen north",
+      "screenshot": "assets/exiled-lands/screenshots/001.jpeg",
+      "referencePin": "assets/exiled-lands/screenshots/references/001_pin.jpeg",
+      "answer": { "x": 0.547, "y": 0.445 }
+    },
+    {
+      "id": "el-002",
+      "label": "Sinkhole region",
+      "screenshot": "assets/exiled-lands/screenshots/002.jpeg",
+      "referencePin": "assets/exiled-lands/screenshots/references/002_pin.jpeg",
+      "answer": { "x": 0.785, "y": 0.564 }
+    },
+    {
+      "id": "el-003",
+      "label": "Eastern river islands",
+      "screenshot": "assets/exiled-lands/screenshots/003.jpeg",
+      "referencePin": "assets/exiled-lands/screenshots/references/003_pin.jpeg",
+      "answer": { "x": 0.684, "y": 0.571 }
+    },
+    {
+      "id": "el-004",
+      "label": "Volcano edge",
+      "screenshot": "assets/exiled-lands/screenshots/004.jpeg",
+      "referencePin": "assets/exiled-lands/screenshots/references/004_pin.jpeg",
+      "answer": { "x": 0.515, "y": 0.267 }
+    },
+    {
+      "id": "el-005",
+      "label": "Southern desert ruins",
+      "screenshot": "assets/exiled-lands/screenshots/005.jpeg",
+      "referencePin": "assets/exiled-lands/screenshots/references/005_pin.jpeg",
+      "answer": { "x": 0.508, "y": 0.682 }
+    }
+  ]
+}

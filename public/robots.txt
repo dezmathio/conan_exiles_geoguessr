@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dezmathio.github.io/conan_exiles_geoguessr/sitemap.xml

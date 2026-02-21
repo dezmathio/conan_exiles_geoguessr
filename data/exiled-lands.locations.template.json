@@ -1,0 +1,15 @@
+{
+  "mapId": "exiled-lands",
+  "mapImage": "assets/exiled-lands/map/exiled-lands-basemap.jpg",
+  "locations": [
+    {
+      "id": "el-001",
+      "screenshot": "assets/exiled-lands/screenshots/el-001.jpeg",
+      "answer": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "notes": "Short description of what the screenshot shows."
+    }
+  ]
+}

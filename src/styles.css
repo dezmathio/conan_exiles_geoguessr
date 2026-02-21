@@ -128,6 +128,76 @@ body {
   border: 1px solid #5f4327;
 }
 
+.round-result-page .card h2 {
+  margin: 0 0 0.55rem;
+}
+
+.result-map-stage {
+  position: relative;
+  width: min(100%, 62vh, 760px);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #6f4f2e;
+  background: #110d0a;
+}
+
+.result-map-canvas {
+  position: absolute;
+  inset: 0;
+  transform-origin: top left;
+}
+
+.result-map-canvas img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.result-connector {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.result-connector line {
+  stroke: #f1c37a;
+  stroke-width: 0.55;
+  stroke-dasharray: 2 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.result-stats-inline {
+  margin: 0.4rem 0 0;
+  color: #dcc4a4;
+  text-align: center;
+}
+
+.round-result-page {
+  gap: 0.75rem;
+}
+
+.round-result-page .round-header h1 {
+  margin: 0;
+}
+
+.round-result-page .round-header p {
+  margin: 0.2rem 0 0;
+}
+
+.round-result-page .legend {
+  margin: 0.55rem 0 0;
+  justify-content: center;
+}
+
+.round-result-page .actions {
+  justify-content: center;
+}
+
 .mini-map-panel {
   position: fixed;
   right: 1rem;

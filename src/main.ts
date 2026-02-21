@@ -618,31 +618,39 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
   clearOutsideCollapseListener();
   const answerMarkerHtml = answerMarker(result.location.answer);
   const guessMarkerHtml = guessMarker(result.guess);
+  const focusX = (result.guess.x + result.location.answer.x) / 2;
+  const focusY = (result.guess.y + result.location.answer.y) / 2;
+  const normalizedDistance = clamp(result.distance / Math.sqrt(2), 0, 1);
+  const zoom = clamp(4.8 - normalizedDistance * 3.2, 1.7, 4.8);
+  const offsetXPercent = 50 - focusX * 100 * zoom;
+  const offsetYPercent = 50 - focusY * 100 * zoom;
+  const connector = connectorLine(result.guess, result.location.answer);
 
   app.innerHTML = `
-    <main class="page">
+    <main class="page round-result-page">
       <header class="round-header">
         <h1>Round ${roundNumber} result</h1>
         <p><strong>${result.points.toLocaleString()}</strong> points</p>
         <p>Distance: ${(result.distance * 100).toFixed(2)} map units</p>
       </header>
-      <section class="play-grid">
-        <article class="card">
-          <h2>Screenshot</h2>
-          <img class="screenshot" src="${result.location.screenshot}" alt="Round screenshot ${roundNumber}" />
-        </article>
-        <article class="card">
-          <h2>Your guess vs answer</h2>
-          <div class="map-stage">
-            <img src="${mapPack.mapImage}" alt="Exiled Lands map answer view" />
+      <section class="card">
+        <h2>Guess vs answer</h2>
+        <div class="result-map-stage">
+          <div
+            class="result-map-canvas"
+            style="transform: translate(${offsetXPercent}%, ${offsetYPercent}%) scale(${zoom}); --pin-inverse-zoom: ${(1 / zoom).toFixed(5)};"
+          >
+            <img src="${mapPack.mapImage}" alt="Exiled Lands map result view" />
+            ${connector}
             ${answerMarkerHtml}
             ${guessMarkerHtml}
           </div>
-          <p class="legend">
-            <span class="dot answer-dot"></span> Answer
-            <span class="dot guess-dot"></span> Your guess
-          </p>
-        </article>
+        </div>
+        <p class="legend">
+          <span class="dot answer-dot"></span> Answer
+          <span class="dot guess-dot"></span> Your guess
+        </p>
+        <p class="result-stats-inline">Distance ${(result.distance * 100).toFixed(2)} · ${result.points.toLocaleString()} pts</p>
       </section>
       <div class="actions">
         <button id="next-btn" class="btn btn-primary">
@@ -767,6 +775,14 @@ function guessMarker(coord: Coord): string {
 
 function answerMarker(coord: Coord): string {
   return `<div class="map-marker map-marker-answer" style="left:${coord.x * 100}%; top:${coord.y * 100}%;" title="Answer"></div>`;
+}
+
+function connectorLine(a: Coord, b: Coord): string {
+  return `
+    <svg class="result-connector" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <line x1="${a.x * 100}" y1="${a.y * 100}" x2="${b.x * 100}" y2="${b.y * 100}" />
+    </svg>
+  `;
 }
 
 type MapViewState = {

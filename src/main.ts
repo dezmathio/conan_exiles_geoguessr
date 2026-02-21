@@ -8,10 +8,17 @@ type Coord = {
 
 type Location = {
   id: string;
-  label: string;
   screenshot: string;
   referencePin?: string;
+  metadata?: LocationMetadata;
   answer: Coord;
+};
+
+type LocationMetadata = {
+  biome?: string;
+  tags?: string[];
+  poiType?: string;
+  notes?: string;
 };
 
 type MapPack = {
@@ -73,7 +80,6 @@ function renderHome(): void {
         <h1>Conan Exiles GeoGuessr</h1>
         <p class="subtitle">Exiled Lands edition</p>
         <button id="start-game-btn" class="btn btn-hero">START GUESSING</button>
-        <a class="tool-link" href="?tool=coords">Open coordinate helper</a>
       </div>
       <p class="disclaimer">Conan Exiles is property of Funcom. This is an unofficial fan project.</p>
     </main>
@@ -102,7 +108,6 @@ function renderRound(): void {
     <main class="page page-play">
       <header class="round-header">
         <h1>Round ${roundNumber} / ${ROUNDS_PER_SESSION}</h1>
-        <p>${escapeHtml(location.label)}</p>
       </header>
       <section class="card screenshot-focus">
         <h2>Screenshot</h2>
@@ -123,12 +128,18 @@ function renderRound(): void {
             ${marker}
           </div>
         </div>
+        <div id="mini-map-guess-wrap" class="mini-map-guess-wrap ${selectedGuess ? "is-ready" : ""}">
+          <button
+            id="guess-bar-btn"
+            class="guess-bar-btn"
+            ${selectedGuess ? "" : "disabled"}
+          >
+            GUESS
+          </button>
+        </div>
         <p class="map-instructions">Scroll to zoom, click-drag to pan, click to place pin.</p>
       </aside>
       <div class="actions">
-        <button id="submit-guess-btn" class="btn btn-primary" ${selectedGuess ? "" : "disabled"}>
-          Confirm guess
-        </button>
         <button id="quit-btn" class="btn btn-secondary">Back to home</button>
       </div>
     </main>
@@ -137,12 +148,21 @@ function renderRound(): void {
   const mapViewport = document.querySelector<HTMLDivElement>("#map-viewport");
   const mapCanvas = document.querySelector<HTMLDivElement>("#map-canvas");
   const miniMapPanel = document.querySelector<HTMLElement>("#mini-map-panel");
+  const guessWrap = document.querySelector<HTMLDivElement>("#mini-map-guess-wrap");
   const zoomInButton = document.querySelector<HTMLButtonElement>("#zoom-in-btn");
   const zoomOutButton = document.querySelector<HTMLButtonElement>("#zoom-out-btn");
   const zoomResetButton = document.querySelector<HTMLButtonElement>("#zoom-reset-btn");
-  const submitButton = document.querySelector<HTMLButtonElement>("#submit-guess-btn");
+  const guessBarButton = document.querySelector<HTMLButtonElement>("#guess-bar-btn");
 
   if (miniMapPanel) {
+    miniMapPanel.addEventListener("mouseenter", () => {
+      if (isMapExpanded) {
+        return;
+      }
+      isMapExpanded = true;
+      renderRound();
+    });
+
     const outsideCollapseHandler = (event: PointerEvent): void => {
       if (ignoreNextOutsidePointerDown) {
         ignoreNextOutsidePointerDown = false;
@@ -242,6 +262,12 @@ function renderRound(): void {
 
       if (submitButton) {
         submitButton.disabled = false;
+      }
+      if (guessBarButton) {
+        guessBarButton.disabled = false;
+      }
+      if (guessWrap) {
+        guessWrap.classList.add("is-ready");
       }
     };
 
@@ -364,7 +390,7 @@ function renderRound(): void {
     applyMapState();
   }
 
-  submitButton?.addEventListener("click", () => {
+  const submitGuess = (): void => {
     if (!selectedGuess) {
       return;
     }
@@ -379,7 +405,12 @@ function renderRound(): void {
     });
 
     renderRoundFeedback(roundResults[roundResults.length - 1], roundNumber);
-  });
+  };
+
+  // Keep this as a no-op fallback if legacy button is reintroduced.
+  const submitButton = document.querySelector<HTMLButtonElement>("#submit-guess-btn");
+  submitButton?.addEventListener("click", submitGuess);
+  guessBarButton?.addEventListener("click", submitGuess);
 
   const quitButton = document.querySelector<HTMLButtonElement>("#quit-btn");
   quitButton?.addEventListener("click", renderHome);
@@ -620,10 +651,10 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
   const guessMarkerHtml = guessMarker(result.guess);
   const focusX = (result.guess.x + result.location.answer.x) / 2;
   const focusY = (result.guess.y + result.location.answer.y) / 2;
-  const normalizedDistance = clamp(result.distance / Math.sqrt(2), 0, 1);
-  const zoom = clamp(4.8 - normalizedDistance * 3.2, 1.7, 4.8);
-  const offsetXPercent = 50 - focusX * 100 * zoom;
-  const offsetYPercent = 50 - focusY * 100 * zoom;
+  const finalZoom = computeResultZoomForPins(result.guess, result.location.answer);
+  const startZoom = clamp(finalZoom + 1.1, 2.2, 6.2);
+  const startTransform = resultMapTransform(result.guess.x, result.guess.y, startZoom);
+  const finalTransform = resultMapTransform(focusX, focusY, finalZoom);
   const connector = connectorLine(result.guess, result.location.answer);
 
   app.innerHTML = `
@@ -637,8 +668,9 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
         <h2>Guess vs answer</h2>
         <div class="result-map-stage">
           <div
+            id="result-map-canvas"
             class="result-map-canvas"
-            style="transform: translate(${offsetXPercent}%, ${offsetYPercent}%) scale(${zoom}); --pin-inverse-zoom: ${(1 / zoom).toFixed(5)};"
+            style="transform: ${startTransform}; --pin-inverse-zoom: ${(1 / startZoom).toFixed(5)};"
           >
             <img src="${mapPack.mapImage}" alt="Exiled Lands map result view" />
             ${connector}
@@ -650,17 +682,38 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
           <span class="dot answer-dot"></span> Answer
           <span class="dot guess-dot"></span> Your guess
         </p>
-        <p class="result-stats-inline">Distance ${(result.distance * 100).toFixed(2)} · ${result.points.toLocaleString()} pts</p>
+        <div id="result-score-panel" class="result-score-panel">
+          <p class="result-stats-inline">Distance ${(result.distance * 100).toFixed(2)} · ${result.points.toLocaleString()} pts</p>
+          <button id="next-btn" class="btn btn-primary result-next-btn">
+            ${roundIndex + 1 >= ROUNDS_PER_SESSION ? "View final score" : "Next round"}
+          </button>
+        </div>
       </section>
-      <div class="actions">
-        <button id="next-btn" class="btn btn-primary">
-          ${roundIndex + 1 >= ROUNDS_PER_SESSION ? "View final score" : "Next round"}
-        </button>
-      </div>
     </main>
   `;
 
+  const resultMapCanvas = document.querySelector<HTMLDivElement>("#result-map-canvas");
+  const resultScorePanel = document.querySelector<HTMLDivElement>("#result-score-panel");
   const nextButton = document.querySelector<HTMLButtonElement>("#next-btn");
+  if (nextButton) {
+    nextButton.disabled = true;
+  }
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (resultMapCanvas) {
+        resultMapCanvas.style.transform = finalTransform;
+        resultMapCanvas.style.setProperty("--pin-inverse-zoom", (1 / finalZoom).toFixed(5));
+      }
+      window.setTimeout(() => {
+        resultScorePanel?.classList.add("is-visible");
+        if (nextButton) {
+          nextButton.disabled = false;
+        }
+      }, 700);
+    });
+  });
+
   nextButton?.addEventListener("click", () => {
     roundIndex += 1;
     selectedGuess = null;
@@ -783,6 +836,25 @@ function connectorLine(a: Coord, b: Coord): string {
       <line x1="${a.x * 100}" y1="${a.y * 100}" x2="${b.x * 100}" y2="${b.y * 100}" />
     </svg>
   `;
+}
+
+function resultMapTransform(focusX: number, focusY: number, zoom: number): string {
+  const offsetXPercent = 50 - focusX * 100 * zoom;
+  const offsetYPercent = 50 - focusY * 100 * zoom;
+  return `translate(${offsetXPercent}%, ${offsetYPercent}%) scale(${zoom})`;
+}
+
+function computeResultZoomForPins(guess: Coord, answer: Coord): number {
+  // Keep a safety margin so both pins are visibly inside the frame.
+  const edgePadding = 0.12;
+  const visibleSpan = 1 - edgePadding * 2;
+  const dx = Math.abs(guess.x - answer.x);
+  const dy = Math.abs(guess.y - answer.y);
+  const dominantSpan = Math.max(dx, dy, 0.0001);
+
+  // Ensure both pins fit: dominantSpan * zoom <= visibleSpan.
+  const fitZoom = visibleSpan / dominantSpan;
+  return clamp(fitZoom, 1, 4.8);
 }
 
 type MapViewState = {

@@ -5,38 +5,63 @@
   "locations": [
     {
       "id": "el-001",
-      "label": "Bridge in the frozen north",
       "screenshot": "assets/exiled-lands/screenshots/001.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/001_pin.jpeg",
-      "answer": { "x": 0.3123, "y": 0.4362 }
+      "answer": { "x": 0.3123, "y": 0.4362 },
+      "metadata": {
+        "biome": "",
+        "tags": [],
+        "poiType": "",
+        "notes": ""
+      }
     },
     {
       "id": "el-002",
-      "label": "Wardtowers",
       "screenshot": "assets/exiled-lands/screenshots/002.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/002_pin.jpeg",
-      "answer": { "x": 0.2291, "y": 0.4819 }
+      "answer": { "x": 0.2291, "y": 0.4819 },
+      "metadata": {
+        "biome": "",
+        "tags": [],
+        "poiType": "",
+        "notes": ""
+      }
     },
     {
       "id": "el-003",
-      "label": "Dagons Descent",
       "screenshot": "assets/exiled-lands/screenshots/003.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/003_pin.jpeg",
-      "answer": { "x": 0.7361, "y": 0.6922 }
+      "answer": { "x": 0.7361, "y": 0.6922 },
+      "metadata": {
+        "biome": "",
+        "tags": [],
+        "poiType": "",
+        "notes": ""
+      }
     },
     {
       "id": "el-004",
-      "label": "Volcano Ritual Site",
       "screenshot": "assets/exiled-lands/screenshots/004.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/004_pin.jpeg",
-      "answer": { "x": 0.4420, "y": 0.2983 }
+      "answer": { "x": 0.4420, "y": 0.2983 },
+      "metadata": {
+        "biome": "",
+        "tags": [],
+        "poiType": "",
+        "notes": ""
+      }
     },
     {
       "id": "el-005",
-      "label": "Seppermeru",
       "screenshot": "assets/exiled-lands/screenshots/005.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/005_pin.jpeg",
-      "answer": { "x": 0.1288, "y": 0.6585 }
+      "answer": { "x": 0.1288, "y": 0.6585 },
+      "metadata": {
+        "biome": "",
+        "tags": [],
+        "poiType": "",
+        "notes": ""
+      }
     }
   ]
 }

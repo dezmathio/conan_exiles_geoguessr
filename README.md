@@ -26,7 +26,6 @@ npm run build
 
 - `assets/exiled-lands/map/exiled-lands-basemap.jpg`: main guess map
 - `assets/exiled-lands/screenshots/`: round screenshots (`001.jpeg`, etc)
-- `assets/exiled-lands/screenshots/references/`: optional pin reference images (`001_pin.jpeg`, etc)
 - `src/data/exiled-lands.json`: source of truth for locations and answer coordinates
 
 ## Coordinate Format
@@ -42,16 +41,32 @@ Example:
 {
   "id": "el-001",
   "screenshot": "assets/exiled-lands/screenshots/001.jpeg",
-  "answer": { "x": 0.547, "y": 0.445 }
+  "answer": { "x": 0.547, "y": 0.445 },
+  "metadata": {
+    "biome": "highlands",
+    "tags": ["poi", "ruins"],
+    "poiType": "dungeon",
+    "notes": "Optional freeform notes"
+  }
 }
 ```
 
-## SEO Notes
+## Coordinate Helper
 
-Replace `YOUR_GITHUB_USERNAME` in:
+Use the built-in coordinate helper to place accurate pins:
 
-- `public/robots.txt`
-- `public/sitemap.xml`
+- Local: `http://localhost:5173/conan_exiles_geoguessr/?tool=coords`
+- GitHub Pages: `https://YOUR_GITHUB_USERNAME.github.io/conan_exiles_geoguessr/?tool=coords`
+
+It supports zoom/pan, live hover coordinates, and copy helpers for direct JSON pasting.
+
+## Metadata TODO (Future Themed Rounds)
+
+- Add `metadata.biome` on every location.
+- Add `metadata.tags` values like `poi`, `dungeon`, `hidden-base`, `camp`, `landmark`.
+- Add `metadata.poiType` when relevant (`dungeon`, `obelisk`, `camp`, etc).
+- Keep optional `metadata.notes` for creator context.
+- Future mode idea: filter location pool by metadata for themed sessions.
 
 ## Disclaimer
 

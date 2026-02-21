@@ -49,20 +49,10 @@ renderHome();
 function renderHome(): void {
   app.innerHTML = `
     <main class="page page-home">
-      <h1>Conan Exiles GeoGuessr</h1>
-      <p class="subtitle">Fan-made, open-source map guessing game for Exiled Lands.</p>
-      <section class="card">
-        <h2>How it works</h2>
-        <ol>
-          <li>You get a screenshot from Conan Exiles.</li>
-          <li>Click the Exiled Lands map where you think it was taken.</li>
-          <li>Score points based on how close your guess is.</li>
-        </ol>
-        <p><strong>Session length:</strong> ${ROUNDS_PER_SESSION} rounds</p>
-        <p><strong>Max score:</strong> ${ROUNDS_PER_SESSION * MAX_POINTS_PER_ROUND}</p>
-      </section>
-      <div class="actions">
-        <button id="start-game-btn" class="btn btn-primary">Start game</button>
+      <div class="home-hero">
+        <h1>Conan Exiles GeoGuessr</h1>
+        <p class="subtitle">Exiled Lands edition</p>
+        <button id="start-game-btn" class="btn btn-hero">START GUESSING</button>
       </div>
       <p class="disclaimer">Conan Exiles is property of Funcom. This is an unofficial fan project.</p>
     </main>

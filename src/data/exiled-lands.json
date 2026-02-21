@@ -8,35 +8,35 @@
       "label": "Bridge in the frozen north",
       "screenshot": "assets/exiled-lands/screenshots/001.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/001_pin.jpeg",
-      "answer": { "x": 0.547, "y": 0.445 }
+      "answer": { "x": 0.3123, "y": 0.4362 }
     },
     {
       "id": "el-002",
-      "label": "Sinkhole region",
+      "label": "Wardtowers",
       "screenshot": "assets/exiled-lands/screenshots/002.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/002_pin.jpeg",
-      "answer": { "x": 0.785, "y": 0.564 }
+      "answer": { "x": 0.2291, "y": 0.4819 }
     },
     {
       "id": "el-003",
-      "label": "Eastern river islands",
+      "label": "Dagons Descent",
       "screenshot": "assets/exiled-lands/screenshots/003.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/003_pin.jpeg",
-      "answer": { "x": 0.684, "y": 0.571 }
+      "answer": { "x": 0.7361, "y": 0.6922 }
     },
     {
       "id": "el-004",
-      "label": "Volcano edge",
+      "label": "Volcano Ritual Site",
       "screenshot": "assets/exiled-lands/screenshots/004.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/004_pin.jpeg",
-      "answer": { "x": 0.515, "y": 0.267 }
+      "answer": { "x": 0.4420, "y": 0.2983 }
     },
     {
       "id": "el-005",
-      "label": "Southern desert ruins",
+      "label": "Seppermeru",
       "screenshot": "assets/exiled-lands/screenshots/005.jpeg",
       "referencePin": "assets/exiled-lands/screenshots/references/005_pin.jpeg",
-      "answer": { "x": 0.508, "y": 0.682 }
+      "answer": { "x": 0.1288, "y": 0.6585 }
     }
   ]
 }

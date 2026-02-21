@@ -67,6 +67,18 @@ body {
   color: #cbb79a;
 }
 
+.tool-link {
+  justify-self: center;
+  color: #d9b27b;
+  text-decoration: none;
+  border-bottom: 1px dotted #d9b27b;
+  font-size: 0.95rem;
+}
+
+.tool-link:hover {
+  color: #f0cb94;
+}
+
 .card {
   background: #1f1711;
   border: 1px solid #5f4327;
@@ -187,6 +199,76 @@ body {
   margin: 0.6rem 0 0;
   font-size: 0.82rem;
   color: #c5ad8c;
+}
+
+.coord-tool-page {
+  max-width: 1100px;
+}
+
+.coord-tool-card {
+  padding: 0.75rem;
+}
+
+.coord-tool-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
+}
+
+.coord-zoom-readout {
+  margin-left: 0.3rem;
+  color: #e5c79a;
+  font-size: 0.9rem;
+}
+
+.coord-map-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #6f4f2e;
+  background: #110d0a;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.coord-map-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.coord-map-canvas {
+  position: absolute;
+  inset: 0;
+  transform-origin: top left;
+}
+
+.coord-map-canvas img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.coord-marker {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(var(--pin-inverse-zoom, 1));
+  transform-origin: center;
+  border: 3px solid #ffffff;
+  background: #d6a042;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.6);
+}
+
+.coord-readout code {
+  color: #f0d7b3;
 }
 
 .mini-map-panel.is-expanded {

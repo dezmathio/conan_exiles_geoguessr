@@ -51,7 +51,19 @@ let ignoreNextOutsidePointerDown = false;
 
 const locationsForSession = shuffle([...mapPack.locations]).slice(0, ROUNDS_PER_SESSION);
 
-renderHome();
+initApp();
+
+function initApp(): void {
+  const url = new URL(window.location.href);
+  const tool = url.searchParams.get("tool");
+
+  if (tool === "coords") {
+    renderCoordinateTool();
+    return;
+  }
+
+  renderHome();
+}
 
 function renderHome(): void {
   clearOutsideCollapseListener();
@@ -61,6 +73,7 @@ function renderHome(): void {
         <h1>Conan Exiles GeoGuessr</h1>
         <p class="subtitle">Exiled Lands edition</p>
         <button id="start-game-btn" class="btn btn-hero">START GUESSING</button>
+        <a class="tool-link" href="?tool=coords">Open coordinate helper</a>
       </div>
       <p class="disclaimer">Conan Exiles is property of Funcom. This is an unofficial fan project.</p>
     </main>
@@ -372,6 +385,235 @@ function renderRound(): void {
   quitButton?.addEventListener("click", renderHome);
 }
 
+function renderCoordinateTool(): void {
+  clearOutsideCollapseListener();
+  app.innerHTML = `
+    <main class="page coord-tool-page">
+      <header>
+        <h1>Coordinate Helper</h1>
+        <p class="subtitle">Scroll to zoom, click-drag to pan, click to lock coordinates.</p>
+      </header>
+      <section class="card coord-tool-card">
+        <div class="coord-tool-controls">
+          <button id="coord-zoom-out-btn" class="btn btn-secondary btn-map-control" aria-label="Zoom out">-</button>
+          <button id="coord-zoom-reset-btn" class="btn btn-secondary btn-map-control" aria-label="Reset zoom">Reset</button>
+          <button id="coord-zoom-in-btn" class="btn btn-secondary btn-map-control" aria-label="Zoom in">+</button>
+          <span id="coord-zoom-readout" class="coord-zoom-readout">100%</span>
+        </div>
+        <div id="coord-map-stage" class="coord-map-stage">
+          <div id="coord-map-canvas" class="coord-map-canvas">
+            <img src="${mapPack.mapImage}" alt="Exiled Lands map coordinate helper" draggable="false" />
+            <div id="coord-marker" class="coord-marker" hidden></div>
+          </div>
+        </div>
+      </section>
+      <section class="card coord-readout">
+        <p>Hover: <code id="hover-coord">x: -, y: -</code></p>
+        <p>Selected: <code id="selected-coord">x: -, y: -</code></p>
+        <div class="actions">
+          <button id="copy-coord-btn" class="btn btn-primary" disabled>Copy coordinates</button>
+          <button id="copy-json-btn" class="btn btn-secondary" disabled>Copy JSON answer block</button>
+          <button id="back-home-btn" class="btn btn-secondary">Back to game</button>
+        </div>
+      </section>
+    </main>
+  `;
+
+  const stage = document.querySelector<HTMLDivElement>("#coord-map-stage");
+  const canvas = document.querySelector<HTMLDivElement>("#coord-map-canvas");
+  const marker = document.querySelector<HTMLDivElement>("#coord-marker");
+  const hoverOutput = document.querySelector<HTMLElement>("#hover-coord");
+  const selectedOutput = document.querySelector<HTMLElement>("#selected-coord");
+  const zoomReadout = document.querySelector<HTMLElement>("#coord-zoom-readout");
+  const zoomInButton = document.querySelector<HTMLButtonElement>("#coord-zoom-in-btn");
+  const zoomOutButton = document.querySelector<HTMLButtonElement>("#coord-zoom-out-btn");
+  const zoomResetButton = document.querySelector<HTMLButtonElement>("#coord-zoom-reset-btn");
+  const copyCoordButton = document.querySelector<HTMLButtonElement>("#copy-coord-btn");
+  const copyJsonButton = document.querySelector<HTMLButtonElement>("#copy-json-btn");
+  const backButton = document.querySelector<HTMLButtonElement>("#back-home-btn");
+
+  let selected: Coord | null = null;
+  let view: MapViewState = defaultMapViewState();
+
+  if (
+    stage &&
+    canvas &&
+    marker &&
+    hoverOutput &&
+    selectedOutput &&
+    zoomReadout &&
+    zoomInButton &&
+    zoomOutButton &&
+    zoomResetButton &&
+    copyCoordButton &&
+    copyJsonButton
+  ) {
+    let dragging = false;
+    let dragMoved = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragStartOffsetX = 0;
+    let dragStartOffsetY = 0;
+
+    const applyView = (): void => {
+      const rect = stage.getBoundingClientRect();
+      view = clampMapView(view, rect.width, rect.height);
+      canvas.style.transform = mapTransform(view);
+      canvas.style.setProperty("--pin-inverse-zoom", (1 / view.zoom).toString());
+      zoomReadout.textContent = `${Math.round(view.zoom * 100)}%`;
+      zoomInButton.disabled = view.zoom >= MAP_MAX_ZOOM;
+      zoomOutButton.disabled = view.zoom <= MAP_MIN_ZOOM;
+    };
+
+    const zoomAtPoint = (zoomDelta: number, anchorX: number, anchorY: number): void => {
+      const oldZoom = view.zoom;
+      const nextZoom = clamp(oldZoom + zoomDelta, MAP_MIN_ZOOM, MAP_MAX_ZOOM);
+      if (nextZoom === oldZoom) {
+        return;
+      }
+
+      const factor = nextZoom / oldZoom;
+      view = {
+        ...view,
+        zoom: nextZoom,
+        offsetX: anchorX - (anchorX - view.offsetX) * factor,
+        offsetY: anchorY - (anchorY - view.offsetY) * factor
+      };
+      applyView();
+    };
+
+    stage.addEventListener(
+      "wheel",
+      (event) => {
+        event.preventDefault();
+        const rect = stage.getBoundingClientRect();
+        const anchorX = clamp(event.clientX - rect.left, 0, rect.width);
+        const anchorY = clamp(event.clientY - rect.top, 0, rect.height);
+        zoomAtPoint(event.deltaY < 0 ? MAP_ZOOM_STEP : -MAP_ZOOM_STEP, anchorX, anchorY);
+      },
+      { passive: false }
+    );
+
+    zoomInButton.addEventListener("click", () => {
+      const rect = stage.getBoundingClientRect();
+      zoomAtPoint(MAP_ZOOM_STEP, rect.width / 2, rect.height / 2);
+    });
+
+    zoomOutButton.addEventListener("click", () => {
+      const rect = stage.getBoundingClientRect();
+      zoomAtPoint(-MAP_ZOOM_STEP, rect.width / 2, rect.height / 2);
+    });
+
+    zoomResetButton.addEventListener("click", () => {
+      view = defaultMapViewState();
+      applyView();
+    });
+
+    stage.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) {
+        return;
+      }
+      dragging = true;
+      dragMoved = false;
+      dragStartX = event.clientX;
+      dragStartY = event.clientY;
+      dragStartOffsetX = view.offsetX;
+      dragStartOffsetY = view.offsetY;
+      stage.setPointerCapture(event.pointerId);
+      stage.classList.add("is-dragging");
+    });
+
+    stage.addEventListener("pointermove", (event) => {
+      if (!dragging) {
+        const coord = coordFromClientWithView(stage, event.clientX, event.clientY, view);
+        hoverOutput.textContent = `x: ${formatCoord(coord.x)}, y: ${formatCoord(coord.y)}`;
+        return;
+      }
+
+      if (view.zoom <= MAP_MIN_ZOOM) {
+        return;
+      }
+
+      const deltaX = event.clientX - dragStartX;
+      const deltaY = event.clientY - dragStartY;
+      if (Math.abs(deltaX) > 2 || Math.abs(deltaY) > 2) {
+        dragMoved = true;
+      }
+
+      view = {
+        ...view,
+        offsetX: dragStartOffsetX + deltaX,
+        offsetY: dragStartOffsetY + deltaY
+      };
+      applyView();
+    });
+
+    stage.addEventListener("pointerup", (event) => {
+      if (!dragging) {
+        return;
+      }
+
+      dragging = false;
+      stage.releasePointerCapture(event.pointerId);
+      stage.classList.remove("is-dragging");
+      if (!dragMoved) {
+        selected = coordFromClientWithView(stage, event.clientX, event.clientY, view);
+        marker.hidden = false;
+        marker.style.left = `${selected.x * 100}%`;
+        marker.style.top = `${selected.y * 100}%`;
+        selectedOutput.textContent = `x: ${formatCoord(selected.x)}, y: ${formatCoord(selected.y)}`;
+        copyCoordButton.disabled = false;
+        copyJsonButton.disabled = false;
+      }
+    });
+
+    stage.addEventListener("pointercancel", () => {
+      dragging = false;
+      stage.classList.remove("is-dragging");
+    });
+
+    stage.addEventListener("pointerleave", () => {
+      if (!dragging) {
+        hoverOutput.textContent = "x: -, y: -";
+      }
+    });
+
+    if (typeof ResizeObserver !== "undefined") {
+      const resizeObserver = new ResizeObserver(() => {
+        applyView();
+      });
+      resizeObserver.observe(stage);
+    } else {
+      window.addEventListener("resize", applyView);
+    }
+
+    applyView();
+
+    copyCoordButton.addEventListener("click", async () => {
+      if (!selected) {
+        return;
+      }
+      const payload = `${formatCoord(selected.x)}, ${formatCoord(selected.y)}`;
+      await copyText(payload, copyCoordButton, "Copied");
+    });
+
+    copyJsonButton.addEventListener("click", async () => {
+      if (!selected) {
+        return;
+      }
+      const payload = `"answer": { "x": ${formatCoord(selected.x)}, "y": ${formatCoord(selected.y)} }`;
+      await copyText(payload, copyJsonButton, "Copied");
+    });
+  }
+
+  backButton?.addEventListener("click", () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("tool");
+    history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    renderHome();
+  });
+}
+
 function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
   clearOutsideCollapseListener();
   const answerMarkerHtml = answerMarker(result.location.answer);
@@ -574,6 +816,44 @@ function shuffle<T>(items: T[]): T[] {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+function coordFromClientWithView(container: HTMLElement, clientX: number, clientY: number, view: MapViewState): Coord {
+  const rect = container.getBoundingClientRect();
+  const viewportX = clamp(clientX - rect.left, 0, rect.width);
+  const viewportY = clamp(clientY - rect.top, 0, rect.height);
+  const mapX = (viewportX - view.offsetX) / view.zoom;
+  const mapY = (viewportY - view.offsetY) / view.zoom;
+  return {
+    x: clamp(mapX / rect.width, 0, 1),
+    y: clamp(mapY / rect.height, 0, 1)
+  };
+}
+
+function formatCoord(value: number): string {
+  return value.toFixed(4);
+}
+
+async function copyText(text: string, button: HTMLButtonElement, successLabel: string): Promise<void> {
+  const originalLabel = button.textContent ?? "Copy";
+  try {
+    await navigator.clipboard.writeText(text);
+    button.textContent = successLabel;
+  } catch {
+    const tempArea = document.createElement("textarea");
+    tempArea.value = text;
+    tempArea.style.position = "fixed";
+    tempArea.style.opacity = "0";
+    document.body.appendChild(tempArea);
+    tempArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempArea);
+    button.textContent = successLabel;
+  }
+
+  window.setTimeout(() => {
+    button.textContent = originalLabel;
+  }, 1200);
 }
 
 function escapeHtml(value: string): string {

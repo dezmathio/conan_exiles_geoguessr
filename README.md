@@ -56,7 +56,7 @@ Example:
 Use the built-in coordinate helper to place accurate pins:
 
 - Local: `http://localhost:5173/conan_exiles_geoguessr/?tool=coords`
-- GitHub Pages: `https://YOUR_GITHUB_USERNAME.github.io/conan_exiles_geoguessr/?tool=coords`
+- GitHub Pages: `https://dezmathio.github.io/conan_exiles_geoguessr/?tool=coords`
 
 It supports zoom/pan, live hover coordinates, and copy helpers for direct JSON pasting.
 

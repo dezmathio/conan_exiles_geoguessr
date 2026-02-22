@@ -9,7 +9,6 @@ type Coord = {
 type Location = {
   id: string;
   screenshot: string;
-  referencePin?: string;
   metadata?: LocationMetadata;
   answer: Coord;
 };
@@ -40,6 +39,7 @@ const ROUNDS_PER_SESSION = 5;
 const MAP_MIN_ZOOM = 1;
 const MAP_MAX_ZOOM = 10;
 const MAP_ZOOM_STEP = 0.5;
+const RESULT_MAX_ZOOM = 14;
 
 const mapPack = exiledLandsData as MapPack;
 const appElement = document.querySelector<HTMLDivElement>("#app");
@@ -55,8 +55,22 @@ let mapViewState: MapViewState = defaultMapViewState();
 let isMapExpanded = false;
 let disposeOutsideCollapseListener: (() => void) | null = null;
 let ignoreNextOutsidePointerDown = false;
+let requireMapHoverReset = false;
+let selectedMode: GameMode = "all";
+let locationsForSession: Location[] = [];
+let activeSessionRoundCount = ROUNDS_PER_SESSION;
 
-const locationsForSession = shuffle([...mapPack.locations]).slice(0, ROUNDS_PER_SESSION);
+type GameMode = "all" | "vague" | "rat" | "camp" | "easy" | "medium" | "hard";
+type ModeOption = { id: GameMode; label: string };
+const MODE_OPTIONS: ModeOption[] = [
+  { id: "all", label: "All" },
+  { id: "vague", label: "Vague" },
+  { id: "rat", label: "Rat" },
+  { id: "camp", label: "Camp" },
+  { id: "easy", label: "Easy" },
+  { id: "medium", label: "Medium" },
+  { id: "hard", label: "Hard" }
+];
 
 initApp();
 
@@ -74,11 +88,21 @@ function initApp(): void {
 
 function renderHome(): void {
   clearOutsideCollapseListener();
+  const modeOptionsMarkup = MODE_OPTIONS.map((mode) => {
+    return `<option value="${mode.id}" ${mode.id === selectedMode ? "selected" : ""}>${mode.label}</option>`;
+  }).join("");
+
   app.innerHTML = `
     <main class="page page-home">
       <div class="home-hero">
         <h1>Conan Exiles GeoGuessr</h1>
         <p class="subtitle">Exiled Lands edition</p>
+        <label class="mode-select-wrap" for="mode-select">
+          <span>Mode</span>
+          <select id="mode-select" class="mode-select">
+            ${modeOptionsMarkup}
+          </select>
+        </label>
         <button id="start-game-btn" class="btn btn-hero">START GUESSING</button>
       </div>
       <p class="disclaimer">Conan Exiles is property of Funcom. This is an unofficial fan project.</p>
@@ -86,7 +110,20 @@ function renderHome(): void {
   `;
 
   const startButton = document.querySelector<HTMLButtonElement>("#start-game-btn");
+  const modeSelect = document.querySelector<HTMLSelectElement>("#mode-select");
+  modeSelect?.addEventListener("change", () => {
+    selectedMode = (modeSelect.value as GameMode) ?? "all";
+  });
+
   startButton?.addEventListener("click", () => {
+    const modePool = getLocationsForMode(selectedMode);
+    if (modePool.length === 0) {
+      window.alert(`No locations found for mode "${selectedMode}".`);
+      return;
+    }
+
+    activeSessionRoundCount = Math.min(ROUNDS_PER_SESSION, modePool.length);
+    locationsForSession = shuffle([...modePool]).slice(0, activeSessionRoundCount);
     roundIndex = 0;
     selectedGuess = null;
     roundResults = [];
@@ -98,6 +135,7 @@ function renderHome(): void {
 
 function renderRound(): void {
   clearOutsideCollapseListener();
+  requireMapHoverReset = !isMapExpanded;
   const location = locationsForSession[roundIndex];
   const roundNumber = roundIndex + 1;
   const marker = selectedGuess ? guessMarker(selectedGuess) : "";
@@ -107,7 +145,7 @@ function renderRound(): void {
   app.innerHTML = `
     <main class="page page-play">
       <header class="round-header">
-        <h1>Round ${roundNumber} / ${ROUNDS_PER_SESSION}</h1>
+        <h1>Round ${roundNumber} / ${activeSessionRoundCount}</h1>
       </header>
       <section class="card screenshot-focus">
         <h2>Screenshot</h2>
@@ -156,11 +194,18 @@ function renderRound(): void {
 
   if (miniMapPanel) {
     miniMapPanel.addEventListener("mouseenter", () => {
+      if (requireMapHoverReset) {
+        return;
+      }
       if (isMapExpanded) {
         return;
       }
       isMapExpanded = true;
       renderRound();
+    });
+
+    miniMapPanel.addEventListener("mouseleave", () => {
+      requireMapHoverReset = false;
     });
 
     const outsideCollapseHandler = (event: PointerEvent): void => {
@@ -652,7 +697,7 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
   const focusX = (result.guess.x + result.location.answer.x) / 2;
   const focusY = (result.guess.y + result.location.answer.y) / 2;
   const finalZoom = computeResultZoomForPins(result.guess, result.location.answer);
-  const startZoom = clamp(finalZoom + 1.1, 2.2, 6.2);
+  const startZoom = clamp(finalZoom + 1.6, 2.2, RESULT_MAX_ZOOM + 1.2);
   const startTransform = resultMapTransform(result.guess.x, result.guess.y, startZoom);
   const finalTransform = resultMapTransform(focusX, focusY, finalZoom);
   const connector = connectorLine(result.guess, result.location.answer);
@@ -685,7 +730,7 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
         <div id="result-score-panel" class="result-score-panel">
           <p class="result-stats-inline">Distance ${(result.distance * 100).toFixed(2)} · ${result.points.toLocaleString()} pts</p>
           <button id="next-btn" class="btn btn-primary result-next-btn">
-            ${roundIndex + 1 >= ROUNDS_PER_SESSION ? "View final score" : "Next round"}
+            ${roundIndex + 1 >= activeSessionRoundCount ? "View final score" : "Next round"}
           </button>
         </div>
       </section>
@@ -718,8 +763,10 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
     roundIndex += 1;
     selectedGuess = null;
     mapViewState = defaultMapViewState();
+    isMapExpanded = false;
+    requireMapHoverReset = true;
 
-    if (roundIndex >= ROUNDS_PER_SESSION) {
+    if (roundIndex >= activeSessionRoundCount) {
       renderResults();
       return;
     }
@@ -731,6 +778,17 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
 function renderResults(): void {
   clearOutsideCollapseListener();
   const total = roundResults.reduce((sum, r) => sum + r.points, 0);
+  const maxTotal = activeSessionRoundCount * MAX_POINTS_PER_ROUND;
+  const completionRatio = maxTotal > 0 ? total / maxTotal : 0;
+  const avgDistance = roundResults.length > 0 ? roundResults.reduce((sum, r) => sum + r.distance, 0) / roundResults.length : 0;
+  const avgPoints = roundResults.length > 0 ? Math.round(total / roundResults.length) : 0;
+  const bestRound = roundResults.reduce<RoundResult | null>((best, current) => {
+    if (!best || current.points > best.points) {
+      return current;
+    }
+    return best;
+  }, null);
+  const tier = getScoreTier(completionRatio);
   const shareText = buildShareText(total, roundResults);
   const rows = roundResults
     .map((result, index) => {
@@ -744,11 +802,33 @@ function renderResults(): void {
       `;
     })
     .join("");
+  const roundBadges = roundResults
+    .map((result, index) => {
+      return `<span class="round-badge">R${index + 1}: ${result.points.toLocaleString()} pts</span>`;
+    })
+    .join("");
 
   app.innerHTML = `
     <main class="page page-results">
-      <h1>Session complete</h1>
-      <p class="subtitle">Final score: <strong>${total.toLocaleString()}</strong> / ${(ROUNDS_PER_SESSION * MAX_POINTS_PER_ROUND).toLocaleString()}</p>
+      <section class="card results-hero">
+        <p class="results-mode">Mode: ${escapeHtml(selectedMode)}</p>
+        <h1>${tier.title}</h1>
+        <p class="subtitle">${tier.subtitle}</p>
+        <p class="results-score">Final score: <strong>${total.toLocaleString()}</strong> / ${maxTotal.toLocaleString()}</p>
+        <div class="results-progress">
+          <div class="results-progress-fill" style="width:${Math.round(completionRatio * 100)}%"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Session highlights</h2>
+        <div class="results-highlights">
+          <p><strong>Best round:</strong> ${bestRound ? `${escapeHtml(bestRound.location.id)} (${bestRound.points.toLocaleString()} pts)` : "-"}</p>
+          <p><strong>Average points:</strong> ${avgPoints.toLocaleString()}</p>
+          <p><strong>Average distance:</strong> ${(avgDistance * 100).toFixed(2)} map units</p>
+        </div>
+        <div class="round-badges">${roundBadges}</div>
+      </section>
 
       <section class="card">
         <h2>Round breakdown</h2>
@@ -800,8 +880,18 @@ function renderResults(): void {
 }
 
 function scoreFromDistance(distance: number): number {
-  const score = MAX_POINTS_PER_ROUND * Math.exp(-7 * distance);
-  return Math.max(0, Math.round(score));
+  if (distance <= 0.015) {
+    // Very close guesses should stay near max points.
+    return Math.round(lerp(MAX_POINTS_PER_ROUND, 4960, distance / 0.015));
+  }
+
+  if (distance <= 0.06) {
+    // Keep early decay gentle for close-but-not-perfect pins.
+    return Math.round(lerp(4960, 3600, (distance - 0.015) / 0.045));
+  }
+
+  const tailScore = 3600 * Math.exp(-8 * (distance - 0.06));
+  return Math.max(0, Math.round(tailScore));
 }
 
 function coordDistance(a: Coord, b: Coord): number {
@@ -817,9 +907,28 @@ function buildShareText(total: number, results: RoundResult[]): string {
 
   return [
     `Conan Exiles GeoGuessr (Exiled Lands)`,
-    `Score: ${total}/${ROUNDS_PER_SESSION * MAX_POINTS_PER_ROUND}`,
+    `Mode: ${selectedMode}`,
+    `Score: ${total}/${activeSessionRoundCount * MAX_POINTS_PER_ROUND}`,
     ...lines
   ].join("\n");
+}
+
+function getLocationsForMode(mode: GameMode): Location[] {
+  if (mode === "all") {
+    return mapPack.locations;
+  }
+
+  return mapPack.locations.filter((location) => {
+    const metadata = location.metadata ?? {};
+    const poiType = (metadata.poiType ?? "").toLowerCase().trim();
+    const tags = (metadata.tags ?? []).map((tag) => tag.toLowerCase().trim());
+
+    if (mode === "vague" || mode === "rat" || mode === "camp") {
+      return poiType === mode;
+    }
+
+    return tags.includes(mode);
+  });
 }
 
 function guessMarker(coord: Coord): string {
@@ -846,7 +955,7 @@ function resultMapTransform(focusX: number, focusY: number, zoom: number): strin
 
 function computeResultZoomForPins(guess: Coord, answer: Coord): number {
   // Keep a safety margin so both pins are visibly inside the frame.
-  const edgePadding = 0.12;
+  const edgePadding = 0.04;
   const visibleSpan = 1 - edgePadding * 2;
   const dx = Math.abs(guess.x - answer.x);
   const dy = Math.abs(guess.y - answer.y);
@@ -854,7 +963,20 @@ function computeResultZoomForPins(guess: Coord, answer: Coord): number {
 
   // Ensure both pins fit: dominantSpan * zoom <= visibleSpan.
   const fitZoom = visibleSpan / dominantSpan;
-  return clamp(fitZoom, 1, 4.8);
+  return clamp(fitZoom, 1, RESULT_MAX_ZOOM);
+}
+
+function getScoreTier(ratio: number): { title: string; subtitle: string } {
+  if (ratio >= 0.9) {
+    return { title: "Exile Cartographer", subtitle: "You know these lands like a true map sage." };
+  }
+  if (ratio >= 0.75) {
+    return { title: "Relic Pathfinder", subtitle: "Strong instincts and sharp landmark reads." };
+  }
+  if (ratio >= 0.55) {
+    return { title: "Dune Scout", subtitle: "Solid run. You are getting dangerous out there." };
+  }
+  return { title: "Lost Wanderer", subtitle: "Crom watches. Another run will sharpen your eye." };
 }
 
 type MapViewState = {
@@ -904,6 +1026,10 @@ function shuffle<T>(items: T[]): T[] {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * clamp(t, 0, 1);
 }
 
 function coordFromClientWithView(container: HTMLElement, clientX: number, clientY: number, view: MapViewState): Coord {

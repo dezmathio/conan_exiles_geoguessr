@@ -5,63 +5,483 @@
   "locations": [
     {
       "id": "el-001",
-      "screenshot": "assets/exiled-lands/screenshots/001.jpeg",
-      "referencePin": "assets/exiled-lands/screenshots/references/001_pin.jpeg",
+      "screenshot": "assets/exiled-lands/screenshots/001.jpg",
       "answer": { "x": 0.3123, "y": 0.4362 },
-      "metadata": {
-        "biome": "",
-        "tags": [],
-        "poiType": "",
-        "notes": ""
-      }
+      "metadata": { "biome": "snow", "tags": [], "poiType": "famous", "notes": "" }
     },
     {
       "id": "el-002",
-      "screenshot": "assets/exiled-lands/screenshots/002.jpeg",
-      "referencePin": "assets/exiled-lands/screenshots/references/002_pin.jpeg",
+      "screenshot": "assets/exiled-lands/screenshots/002.jpg",
       "answer": { "x": 0.2291, "y": 0.4819 },
-      "metadata": {
-        "biome": "",
-        "tags": [],
-        "poiType": "",
-        "notes": ""
-      }
+      "metadata": { "biome": "highlands", "tags": [], "poiType": "camp", "notes": "" }
     },
     {
       "id": "el-003",
-      "screenshot": "assets/exiled-lands/screenshots/003.jpeg",
-      "referencePin": "assets/exiled-lands/screenshots/references/003_pin.jpeg",
+      "screenshot": "assets/exiled-lands/screenshots/003.jpg",
       "answer": { "x": 0.7361, "y": 0.6922 },
-      "metadata": {
-        "biome": "",
-        "tags": [],
-        "poiType": "",
-        "notes": ""
-      }
+      "metadata": { "biome": "jungle", "tags": [], "poiType": "camp", "notes": "" }
     },
     {
       "id": "el-004",
-      "screenshot": "assets/exiled-lands/screenshots/004.jpeg",
-      "referencePin": "assets/exiled-lands/screenshots/references/004_pin.jpeg",
-      "answer": { "x": 0.4420, "y": 0.2983 },
-      "metadata": {
-        "biome": "",
-        "tags": [],
-        "poiType": "",
-        "notes": ""
-      }
+      "screenshot": "assets/exiled-lands/screenshots/004.jpg",
+      "answer": { "x": 0.442, "y": 0.2983 },
+      "metadata": { "biome": "volcano", "tags": [], "poiType": "camp", "notes": "" }
     },
     {
       "id": "el-005",
-      "screenshot": "assets/exiled-lands/screenshots/005.jpeg",
-      "referencePin": "assets/exiled-lands/screenshots/references/005_pin.jpeg",
-      "answer": { "x": 0.1288, "y": 0.6585 },
-      "metadata": {
-        "biome": "",
-        "tags": [],
-        "poiType": "",
-        "notes": ""
-      }
+      "screenshot": "assets/exiled-lands/screenshots/005.jpg",
+      "answer": { "x": 0.2639, "y": 0.591 },
+      "metadata": { "biome": "desert", "tags": [], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-006",
+      "screenshot": "assets/exiled-lands/screenshots/006.jpg",
+      "answer": { "x": 0.2637, "y": 0.5914 },
+      "metadata": { "biome": "desert", "tags": [], "poiType": "dungeon", "notes": "" }
+    },
+    {
+      "id": "el-007",
+      "screenshot": "assets/exiled-lands/screenshots/007.jpg",
+      "answer": { "x": 0.4624, "y": 0.5758 },
+      "metadata": { "biome": "highlands", "tags": [], "poiType": "", "notes": "" }
+    },
+    {
+      "id": "el-008",
+      "screenshot": "assets/exiled-lands/screenshots/008.jpg",
+      "answer": { "x": 0.5219, "y": 0.6647 },
+      "metadata": { "biome": "desert", "tags": [], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-009",
+      "screenshot": "assets/exiled-lands/screenshots/009.jpg",
+      "answer": { "x": 0.6237, "y": 0.7815 },
+      "metadata": { "biome": "desert", "tags": [], "poiType": "lore", "notes": "" }
+    },
+    {
+      "id": "el-010",
+      "screenshot": "assets/exiled-lands/screenshots/010.jpg",
+      "answer": { "x": 0.6595, "y": 0.6606 },
+      "metadata": { "biome": "jungle", "tags": [], "poiType": "base", "notes": "" }
+    },
+    {
+      "id": "el-011",
+      "screenshot": "assets/exiled-lands/screenshots/011.jpg",
+      "answer": { "x": 0.8232, "y": 0.5841 },
+      "metadata": { "biome": "jungle", "tags": [], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-012",
+      "screenshot": "assets/exiled-lands/screenshots/012.jpg",
+      "answer": { "x": 0.8486, "y": 0.7272 },
+      "metadata": { "biome": "jungle", "tags": ["medium"], "poiType": "", "notes": "" }
+    },
+    {
+      "id": "el-013",
+      "screenshot": "assets/exiled-lands/screenshots/013.jpg",
+      "answer": { "x": 0.7561, "y": 0.7989 },
+      "metadata": { "biome": "jungle", "tags": ["easy"], "poiType": "", "notes": "" }
+    },
+    {
+      "id": "el-014",
+      "screenshot": "assets/exiled-lands/screenshots/014.jpg",
+      "answer": { "x": 0.7431, "y": 0.7483 },
+      "metadata": { "biome": "jungle", "tags": ["easy"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-015",
+      "screenshot": "assets/exiled-lands/screenshots/015.jpg",
+      "answer": { "x": 0.5557, "y": 0.6836 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-016",
+      "screenshot": "assets/exiled-lands/screenshots/016.jpg",
+      "answer": { "x": 0.5268, "y": 0.7258 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-017",
+      "screenshot": "assets/exiled-lands/screenshots/017.jpg",
+      "answer": { "x": 0.4893, "y": 0.7146 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "mesh", "notes": "" }
+    },
+    {
+      "id": "el-018",
+      "screenshot": "assets/exiled-lands/screenshots/018.jpg",
+      "answer": { "x": 0.4657, "y": 0.7143 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-019",
+      "screenshot": "assets/exiled-lands/screenshots/019.jpg",
+      "answer": { "x": 0.4552, "y": 0.7116 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "boss", "notes": "" }
+    },
+    {
+      "id": "el-020",
+      "screenshot": "assets/exiled-lands/screenshots/020.jpg",
+      "answer": { "x": 0.4469, "y": 0.7482 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-021",
+      "screenshot": "assets/exiled-lands/screenshots/021.jpg",
+      "answer": { "x": 0.2750, "y": 0.7507 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "cave", "notes": "" }
+    },
+    {
+      "id": "el-022",
+      "screenshot": "assets/exiled-lands/screenshots/022.jpg",
+      "answer": { "x": 0.2329, "y": 0.6322 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-023",
+      "screenshot": "assets/exiled-lands/screenshots/023.jpg",
+      "answer": { "x": 0.2320, "y": 0.6192 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "lore", "notes": "" }
+    },
+    {
+      "id": "el-024",
+      "screenshot": "assets/exiled-lands/screenshots/024.jpg",
+      "answer": { "x": 0.2264, "y": 0.5838 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-025",
+      "screenshot": "assets/exiled-lands/screenshots/025.jpg",
+      "answer": { "x": 0.2269, "y": 0.5804 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-026",
+      "screenshot": "assets/exiled-lands/screenshots/026.jpg",
+      "answer": { "x": 0.1820, "y": 0.5749 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "farm", "notes": "" }
+    },
+    {
+      "id": "el-027",
+      "screenshot": "assets/exiled-lands/screenshots/027.jpg",
+      "answer": { "x": 0.1842, "y": 0.6470 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "boss", "notes": "" }
+    },
+    {
+      "id": "el-028",
+      "screenshot": "assets/exiled-lands/screenshots/028.jpg",
+      "answer": { "x": 0.1512, "y": 0.6492 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-029",
+      "screenshot": "assets/exiled-lands/screenshots/029.jpg",
+      "answer": { "x": 0.1025, "y": 0.5575 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-030",
+      "screenshot": "assets/exiled-lands/screenshots/030.jpg",
+      "answer": { "x": 0.1527, "y": 0.5305 },
+      "metadata": { "biome": "redrock", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-031",
+      "screenshot": "assets/exiled-lands/screenshots/031.jpg",
+      "answer": { "x": 0.1449, "y": 0.5074 },
+      "metadata": { "biome": "redrock", "tags": ["easy"], "poiType": "", "notes": "" }
+    },
+    {
+      "id": "el-032",
+      "screenshot": "assets/exiled-lands/screenshots/032.jpg",
+      "answer": { "x": 0.1309, "y": 0.4235 },
+      "metadata": { "biome": "highlands", "tags": ["easy"], "poiType": "obelisk", "notes": "" }
+    },
+    {
+      "id": "el-033",
+      "screenshot": "assets/exiled-lands/screenshots/033.jpg",
+     "answer": { "x": 0.0988, "y": 0.4226 },
+      "metadata": { "biome": "highlands", "tags": ["hard"], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-034",
+      "screenshot": "assets/exiled-lands/screenshots/034.jpg",
+      "answer": { "x": 0.0833, "y": 0.4107 },
+      "metadata": { "biome": "highlands", "tags": ["medium"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-035",
+      "screenshot": "assets/exiled-lands/screenshots/035.jpg",
+      "answer": { "x": 0.1902, "y": 0.3364 },
+      "metadata": { "biome": "snow", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-036",
+      "screenshot": "assets/exiled-lands/screenshots/036.jpg",
+      "answer": { "x": 0.2043, "y": 0.3361 },
+      "metadata": { "biome": "snow", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-037",
+      "screenshot": "assets/exiled-lands/screenshots/037.jpg",
+      "answer": { "x": 0.2502, "y": 0.3252 },
+      "metadata": { "biome": "snow", "tags": ["easy"], "poiType": "", "notes": "" }
+    },
+    {
+      "id": "el-038",
+      "screenshot": "assets/exiled-lands/screenshots/038.jpg",
+      "answer": { "x": 0.3177, "y": 0.3465 },
+      "metadata": { "biome": "snow", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-039",
+      "screenshot": "assets/exiled-lands/screenshots/039.jpg",
+      "answer": { "x": 0.3332, "y": 0.2650 },
+      "metadata": { "biome": "volcano", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-040",
+      "screenshot": "assets/exiled-lands/screenshots/040.jpg",
+      "answer": { "x": 0.4359, "y": 0.2573 },
+      "metadata": { "biome": "volcano", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-041",
+      "screenshot": "assets/exiled-lands/screenshots/041.jpg",
+      "answer": { "x": 0.4074, "y": 0.2341 },
+      "metadata": { "biome": "volcano", "tags": ["medium"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-042",
+      "screenshot": "assets/exiled-lands/screenshots/042.jpg",
+      "answer": { "x": 0.3935, "y": 0.2897 },
+      "metadata": { "biome": "volcano", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-043",
+      "screenshot": "assets/exiled-lands/screenshots/043.jpg",
+      "answer": { "x": 0.3938, "y": 0.2939 },
+      "metadata": { "biome": "volcano", "tags": ["easy"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-044",
+      "screenshot": "assets/exiled-lands/screenshots/044.jpg",
+      "answer": { "x": 0.4046, "y": 0.3311 },
+      "metadata": { "biome": "volcano", "tags": ["easy"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-045",
+      "screenshot": "assets/exiled-lands/screenshots/045.jpg",
+      "answer": { "x": 0.3639, "y": 0.3505 },
+      "metadata": { "biome": "snow", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-046",
+      "screenshot": "assets/exiled-lands/screenshots/046.jpg",
+      "answer": { "x": 0.3896, "y": 0.4219 },
+      "metadata": { "biome": "snow", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-047",
+      "screenshot": "assets/exiled-lands/screenshots/047.jpg",
+      "answer": { "x": 0.3348, "y": 0.4912 },
+      "metadata": { "biome": "highlands", "tags": ["easy"], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-048",
+      "screenshot": "assets/exiled-lands/screenshots/048.jpg",
+      "answer": { "x": 0.3534, "y": 0.5255 },
+      "metadata": { "biome": "highlands", "tags": ["easy"], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-049",
+      "screenshot": "assets/exiled-lands/screenshots/049.jpg",
+      "answer": { "x": 0.3460, "y": 0.5594 },
+      "metadata": { "biome": "highlands", "tags": ["easy"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-050",
+      "screenshot": "assets/exiled-lands/screenshots/050.jpg",
+      "answer": { "x": 0.3334, "y": 0.5674 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-051",
+      "screenshot": "assets/exiled-lands/screenshots/051.jpg",
+      "answer": { "x": 0.3454, "y": 0.5841 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-052",
+      "screenshot": "assets/exiled-lands/screenshots/052.jpg",
+      "answer": { "x": 0.2937, "y": 0.6258 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-053",
+      "screenshot": "assets/exiled-lands/screenshots/053.jpg",
+      "answer": { "x": 0.2683, "y": 0.6838 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "obelisk", "notes": "" }
+    },
+    {
+      "id": "el-054",
+      "screenshot": "assets/exiled-lands/screenshots/054.jpg",
+      "answer": { "x": 0.2682, "y": 0.6597 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-055",
+      "screenshot": "assets/exiled-lands/screenshots/055.jpg",
+      "answer": { "x": 0.1913, "y": 0.6781 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-056",
+      "screenshot": "assets/exiled-lands/screenshots/056.jpg",
+      "answer": { "x": 0.1120, "y": 0.6603 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-057",
+      "screenshot": "assets/exiled-lands/screenshots/057.jpg",
+      "answer": { "x": 0.1387, "y": 0.6149 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-058",
+      "screenshot": "assets/exiled-lands/screenshots/058.jpg",
+      "answer": { "x": 0.1865, "y": 0.5328 },
+      "metadata": { "biome": "redrock", "tags": ["medium"], "poiType": "", "notes": "" }
+    },
+    {
+      "id": "el-059",
+      "screenshot": "assets/exiled-lands/screenshots/059.jpg",
+      "answer": { "x": 0.1921, "y": 0.4967 },
+      "metadata": { "biome": "highlands", "tags": ["easy"], "poiType": "", "notes": "" }
+    },
+    {
+      "id": "el-060",
+      "screenshot": "assets/exiled-lands/screenshots/060.jpg",
+      "answer": { "x": 0.2374, "y": 0.4256 },
+      "metadata": { "biome": "highlands", "tags": ["medium"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-061",
+      "screenshot": "assets/exiled-lands/screenshots/061.jpg",
+      "answer": { "x": 0.1739, "y": 0.2911 },
+      "metadata": { "biome": "snow", "tags": ["medium"], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-062",
+      "screenshot": "assets/exiled-lands/screenshots/062.jpg",
+      "answer": { "x": 0.2635, "y": 0.2207 },
+      "metadata": { "biome": "snow", "tags": ["hard"], "poiType": "dungeon", "notes": "" }
+    },
+    {
+      "id": "el-063",
+      "screenshot": "assets/exiled-lands/screenshots/063.jpg",
+      "answer": { "x": 0.3275, "y": 0.3381 },
+      "metadata": { "biome": "snow", "tags": ["easy"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-064",
+      "screenshot": "assets/exiled-lands/screenshots/064.jpg",
+      "answer": { "x": 0.3274, "y": 0.3798 },
+      "metadata": { "biome": "snow", "tags": ["easy"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-065",
+      "screenshot": "assets/exiled-lands/screenshots/065.jpg",
+      "answer": { "x": 0.3191, "y": 0.3886 },
+      "metadata": { "biome": "snow", "tags": ["hard"], "poiType": "dungeon", "notes": "" }
+    },
+    {
+      "id": "el-066",
+      "screenshot": "assets/exiled-lands/screenshots/066.jpg",
+      "answer": { "x": 0.2730, "y": 0.5214 },
+      "metadata": { "biome": "highlands", "tags": ["medium"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-067",
+      "screenshot": "assets/exiled-lands/screenshots/067.jpg",
+      "answer": { "x": 0.2708, "y": 0.5425 },
+      "metadata": { "biome": "highlands", "tags": ["easy"], "poiType": "", "notes": "" }
+    },
+    {
+      "id": "el-068",
+      "screenshot": "assets/exiled-lands/screenshots/068.jpg",
+      "answer": { "x": 0.2774, "y": 0.5835 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "camp", "notes": "" }
+    },
+    {
+      "id": "el-069",
+      "screenshot": "assets/exiled-lands/screenshots/069.jpg",
+      "answer": { "x": 0.3425, "y": 0.6237 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "secret", "notes": "" }
+    },
+    {
+      "id": "el-070",
+      "screenshot": "assets/exiled-lands/screenshots/070.jpg",
+      "answer": { "x": 0.3520, "y": 0.6274 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "resources", "notes": "" }
+    },
+    {
+      "id": "el-071",
+      "screenshot": "assets/exiled-lands/screenshots/071.jpg",
+      "answer": { "x": 0.4163, "y": 0.5926 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-072",
+      "screenshot": "assets/exiled-lands/screenshots/072.jpg",
+      "answer": { "x": 0.4839, "y": 0.6656 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-073",
+      "screenshot": "assets/exiled-lands/screenshots/073.jpg",
+      "answer": { "x": 0.4881, "y": 0.6718 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-074",
+      "screenshot": "assets/exiled-lands/screenshots/074.jpg",
+      "answer": { "x": 0.5002, "y": 0.7758 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-075",
+      "screenshot": "assets/exiled-lands/screenshots/075.jpg",
+      "answer": { "x": 0.3729, "y": 0.8372 },
+      "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-076",
+      "screenshot": "assets/exiled-lands/screenshots/076.jpg",
+      "answer": { "x": 0.3300, "y": 0.8680 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-077",
+      "screenshot": "assets/exiled-lands/screenshots/077.jpg",
+      "answer": { "x": 0.2966, "y": 0.8698 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "rat", "notes": "" }
+    },
+    {
+      "id": "el-078",
+      "screenshot": "assets/exiled-lands/screenshots/078.jpg",
+      "answer": { "x": 0.2524, "y": 0.8204 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "obelisk", "notes": "" }
+    },
+    {
+      "id": "el-079",
+      "screenshot": "assets/exiled-lands/screenshots/079.jpg",
+      "answer": { "x": 0.2395, "y": 0.7795 },
+      "metadata": { "biome": "desert", "tags": ["easy"], "poiType": "vague", "notes": "" }
+    },
+    {
+      "id": "el-080",
+      "screenshot": "assets/exiled-lands/screenshots/080.jpg",
+      "answer": { "x": 0.1634, "y": 0.7009 },
+      "metadata": { "biome": "desert", "tags": ["medium"], "poiType": "vague", "notes": "" }
     }
   ]
 }

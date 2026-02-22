@@ -67,6 +67,26 @@ body {
   color: #cbb79a;
 }
 
+.mode-select-wrap {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+}
+
+.mode-select-wrap span {
+  font-size: 0.9rem;
+  color: #d5bf9d;
+}
+
+.mode-select {
+  min-width: 220px;
+  border-radius: 10px;
+  border: 1px solid #7b5933;
+  background: #1e1510;
+  color: #f1dfbf;
+  padding: 0.52rem 0.75rem;
+}
+
 .card {
   background: #1f1711;
   border: 1px solid #5f4327;
@@ -486,6 +506,63 @@ body {
   font-size: 0.9rem;
   color: #b79f81;
   text-align: center;
+}
+
+.results-hero h1 {
+  margin: 0;
+}
+
+.results-mode {
+  margin: 0;
+  color: #d2b58a;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.results-score {
+  margin: 0.4rem 0 0;
+  font-size: 1.05rem;
+}
+
+.results-progress {
+  margin-top: 0.65rem;
+  height: 12px;
+  border-radius: 999px;
+  background: #302217;
+  overflow: hidden;
+  border: 1px solid #6b4d2f;
+}
+
+.results-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8ad451, #d6a042);
+}
+
+.results-highlights {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.results-highlights p {
+  margin: 0;
+}
+
+.round-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.round-badge {
+  display: inline-block;
+  padding: 0.34rem 0.58rem;
+  border-radius: 999px;
+  border: 1px solid #6b4d2f;
+  background: #2a1f16;
+  color: #e4cfae;
+  font-size: 0.85rem;
 }
 
 table {

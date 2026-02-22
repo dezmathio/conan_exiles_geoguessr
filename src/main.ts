@@ -55,7 +55,7 @@ let mapViewState: MapViewState = defaultMapViewState();
 let isMapExpanded = false;
 let disposeOutsideCollapseListener: (() => void) | null = null;
 let ignoreNextOutsidePointerDown = false;
-let requireMapHoverReset = false;
+let ignoreMapHoverUntilMs = 0;
 let selectedMode: GameMode = "all";
 let locationsForSession: Location[] = [];
 let activeSessionRoundCount = ROUNDS_PER_SESSION;
@@ -135,7 +135,6 @@ function renderHome(): void {
 
 function renderRound(): void {
   clearOutsideCollapseListener();
-  requireMapHoverReset = !isMapExpanded;
   const location = locationsForSession[roundIndex];
   const roundNumber = roundIndex + 1;
   const marker = selectedGuess ? guessMarker(selectedGuess) : "";
@@ -194,7 +193,7 @@ function renderRound(): void {
 
   if (miniMapPanel) {
     miniMapPanel.addEventListener("mouseenter", () => {
-      if (requireMapHoverReset) {
+      if (Date.now() < ignoreMapHoverUntilMs) {
         return;
       }
       if (isMapExpanded) {
@@ -202,10 +201,6 @@ function renderRound(): void {
       }
       isMapExpanded = true;
       renderRound();
-    });
-
-    miniMapPanel.addEventListener("mouseleave", () => {
-      requireMapHoverReset = false;
     });
 
     const outsideCollapseHandler = (event: PointerEvent): void => {
@@ -764,7 +759,7 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
     selectedGuess = null;
     mapViewState = defaultMapViewState();
     isMapExpanded = false;
-    requireMapHoverReset = true;
+    ignoreMapHoverUntilMs = Date.now() + 250;
 
     if (roundIndex >= activeSessionRoundCount) {
       renderResults();

@@ -413,7 +413,7 @@
     },
     {
       "id": "el-069",
-      "screenshot": "assets/exiled-lands/screenshots/069.jpg",
+      "screenshot": "assets/exiled-lands/screenshots/069.png",
       "answer": { "x": 0.3425, "y": 0.6237 },
       "metadata": { "biome": "desert", "tags": ["hard"], "poiType": "secret", "notes": "" }
     },

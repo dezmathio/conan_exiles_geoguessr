@@ -149,7 +149,7 @@ function renderRound(): void {
       </header>
       <section class="card screenshot-focus">
         <h2>Screenshot</h2>
-        <img class="screenshot screenshot-main" src="${location.screenshot}" alt="Round screenshot ${roundNumber}" />
+        <img class="screenshot screenshot-main" src="${assetPath(location.screenshot)}" alt="Round screenshot ${roundNumber}" />
       </section>
       <aside id="mini-map-panel" class="card mini-map-panel${expandedClass}">
         <div class="mini-map-header">
@@ -162,7 +162,7 @@ function renderRound(): void {
         </div>
         <div id="map-viewport" class="map-viewport">
           <div id="map-canvas" class="map-canvas" style="transform: ${transform};">
-            <img id="map-image" src="${mapPack.mapImage}" alt="Exiled Lands map" draggable="false" />
+            <img id="map-image" src="${assetPath(mapPack.mapImage)}" alt="Exiled Lands map" draggable="false" />
             ${marker}
           </div>
         </div>
@@ -478,7 +478,7 @@ function renderCoordinateTool(): void {
         </div>
         <div id="coord-map-stage" class="coord-map-stage">
           <div id="coord-map-canvas" class="coord-map-canvas">
-            <img src="${mapPack.mapImage}" alt="Exiled Lands map coordinate helper" draggable="false" />
+            <img src="${assetPath(mapPack.mapImage)}" alt="Exiled Lands map coordinate helper" draggable="false" />
             <div id="coord-marker" class="coord-marker" hidden></div>
           </div>
         </div>
@@ -717,7 +717,7 @@ function renderRoundFeedback(result: RoundResult, roundNumber: number): void {
             class="result-map-canvas"
             style="transform: ${startTransform}; --pin-inverse-zoom: ${(1 / startZoom).toFixed(5)};"
           >
-            <img src="${mapPack.mapImage}" alt="Exiled Lands map result view" />
+            <img src="${assetPath(mapPack.mapImage)}" alt="Exiled Lands map result view" />
             ${connector}
             ${answerMarkerHtml}
             ${guessMarkerHtml}
@@ -1030,6 +1030,14 @@ function clamp(value: number, min: number, max: number): number {
 
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * clamp(t, 0, 1);
+}
+
+function assetPath(path: string): string {
+  // Assets are served from Vite publicDir ("assets"), so strip leading "assets/".
+  if (path.startsWith("assets/")) {
+    return path.slice("assets/".length);
+  }
+  return path;
 }
 
 function coordFromClientWithView(container: HTMLElement, clientX: number, clientY: number, view: MapViewState): Coord {

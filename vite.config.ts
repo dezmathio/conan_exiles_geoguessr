@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/conan_exiles_geoguessr/"
+  base: "/conan_exiles_geoguessr/",
+  publicDir: "assets"
 });

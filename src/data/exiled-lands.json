@@ -30,7 +30,7 @@
     {
       "id": "el-005",
       "screenshot": "assets/exiled-lands/screenshots/005.jpg",
-      "answer": { "x": 0.2639, "y": 0.591 },
+      "answer": { "x": 0.1286, "y": 0.6582 },
       "metadata": { "biome": "desert", "tags": [], "poiType": "camp", "notes": "" }
     },
     {
